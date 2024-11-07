@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Sequências Lógicas</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-image: url("https://www.criancasespeciais.com.br/wp-content/uploads/2023/03/dados-780x470.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            text-align: center;  
+        }
+        h1 {
+            color: rgb(243, 243, 247);
+            font-size: 60px;
+            display: inline-block;
+            padding: 10px;
+        }
+        #game-container {
+            margin: 50px auto;
+            max-width: 100%;
+            padding: 20px;
+        }
+        .sequence-image {
+            width: 120px;
+            height: 120px;
+            margin: 10px;
+            border: 3px solid #ccc;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+            animation: fadeIn 1.5s ease;
+        }
+        .sequence-image:hover {
+            transform: scale(1.1);
+        }
+        .answer-button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            color: white;
+        }
+        .answer-button:hover {
+            background-color: #386aa0;
+        }
+        .hidden {
+            display: none;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Figuras Geométricas</h1>
+    <div id="game-container" class="container text-center">
+        <div id="sequence" class="d-flex flex-wrap justify-content-center">
+            <img class="sequence-image" src="sequencias/triangulo.png" alt="Sequência 1">
+            <img class="sequence-image" src="sequencias/quadrado.png" alt="Sequência 2">
+            <img class="sequence-image" src="sequencias/pentagono.png" alt="Sequência 3">
+            <img class="sequence-image" src="sequencias/interrogacao.png" alt="Complete a Sequência">
+        </div>
+
+        <div id="message" class="mt-3"></div>
+
+        <div id="answers" class="d-flex flex-wrap justify-content-center mt-3">
+            <button class="answer-button btn btn-primary" onclick="checkAnswer('4')"><strong>4</strong></button>
+            <button class="answer-button btn btn-primary" onclick="checkAnswer('5')"><strong>5</strong></button>
+            <button class="answer-button btn btn-primary" onclick="checkAnswer('6')"><strong>6</strong></button>
+        </div>
+        
+        <button id="nextButton" class="answer-button btn btn-success mt-3 hidden" onclick="nextQuestion()"><strong>Próxima</strong></button>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        const sequences = [
+            {
+                sequenceImages: ['sequencias/triangulo.png', 'sequencias/quadrado.png', 'sequencias/pentagono.png'],
+                correctAnswer: '6' // Resposta correta agora é 6 (hexágono)
+            }
+        ];
+
+        let currentSequenceIndex = 0;
+
+        function displaySequence() {
+            const sequenceDiv = document.getElementById('sequence');
+            sequenceDiv.innerHTML = '';
+
+            sequences[currentSequenceIndex].sequenceImages.forEach(image => {
+                const img = document.createElement('img');
+                img.src = image;
+                img.className = 'sequence-image';
+                sequenceDiv.appendChild(img);
+            });
+
+            const mysteryImage = document.createElement('img');
+            mysteryImage.src = 'sequencias/interrogacao.png';
+            mysteryImage.className = 'sequence-image';
+            sequenceDiv.appendChild(mysteryImage);
+        }
+
+        function checkAnswer(answer) {
+            const correctAnswer = sequences[currentSequenceIndex].correctAnswer;
+            const messageDiv = document.getElementById('message');
+
+            if (answer === correctAnswer) {
+                messageDiv.innerHTML = "<h1 style='color:yellow;'>Correto! A próxima figura é o hexágono (6 lados).</h1>";
+            } else {
+                messageDiv.innerHTML = "<h1 style='color:red;'><strong>Errado!</strong>A resposta correta é o hexágono (6 lados).</h1>";
+            }
+
+            document.getElementById('nextButton').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentSequenceIndex = (currentSequenceIndex + 1) % sequences.length;
+            displaySequence();
+            document.getElementById('message').innerHTML = "";
+            document.getElementById('nextButton').classList.add('hidden');
+        }
+
+        // Exibe a primeira sequência ao carregar a página
+        displaySequence();
+    </script>
+
+</body>
+</html>
